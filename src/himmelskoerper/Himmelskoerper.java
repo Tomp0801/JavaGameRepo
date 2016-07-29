@@ -33,9 +33,13 @@ public abstract class Himmelskoerper extends SpaceObject
 	private float rotationsZeit;
 	
 	/**
-	 * Berechnet position und ausrichtung, abhängig von einem vergangenen Zeitintervall
-	 * 
-	 * @param zeitIntervall : Zeit die vergangen ist, und für die Berechnungen gemacht werden sollem
+	 * Speichert den letzten Zeitpunkt in dem die Position des Planeten berechnet wurde
 	 */
-	abstract void bewegen(int zeitIntervall);
+	private long lastRefresh;
+	
+	
+	/**
+	 * Berechnet position und ausrichtung, seit dem letzten refresh
+	 */
+	abstract void refresh();
 }

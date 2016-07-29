@@ -12,6 +12,7 @@ public abstract class SpaceObject
 {
 	/**
 	 * Position des Objektes in einem Koordinatensystem
+	 * 	Bezugskoordinatensystem ist das aktuell geladene Sonnensystem
 	 */
 	Point position;
 }

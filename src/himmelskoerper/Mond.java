@@ -15,7 +15,7 @@ public class Mond extends Himmelskoerper implements Bewohnbar, ImOrbit
 	
 	
 	@Override
-	void bewegen(int zeitIntervall) {
+	void refresh() {
 		// TODO Auto-generated method stub
 		
 	}
