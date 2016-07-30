@@ -7,7 +7,7 @@ package himmelskoerper;
  * @author Thomas
  * @version 1.0
  */
-public class Mond extends InOrbit<Planet>
+public class Mond extends InOrbit
 {
 
 	public Mond(Planet bezugsKoerper, float distanz, float masse) {

@@ -8,7 +8,8 @@ package himmelskoerper;
  */
 public final class Constants {
 	/**
-	 * Gravitationskonstante G
+	 * Gravitationskonstante G = 6.67408 * 10^(-11) m^3 / (kg * s^2)
+	 * Einheit: km^3 / (kg * s^2)
 	 */
-	static final double G = 6.67408 * Math.pow(10, -11);
+	static final double G = 6.67408 * Math.pow(10, -20);
 }

@@ -1,5 +1,6 @@
 package himmelskoerper;
 
+import java.util.LinkedList;
 import java.util.Vector;
 
 /**
@@ -11,8 +12,13 @@ import java.util.Vector;
  * @author Thomas
  * @version 1.0
  */
-public class Planet extends InOrbit<Stern>
+public class Planet extends InOrbit implements Orbitable
 {
+	/**
+	 * Liste der Monde des Planeten
+	 */
+	LinkedList<Mond> monde;
+	
 	/**
 	 * aktueller Winkel 
 	 */
@@ -30,7 +36,7 @@ public class Planet extends InOrbit<Stern>
 	 * @param masse
 	 * @param typ der Typ des Planeten (gas oder fest)
 	 */
-	public Planet(Stern bezugsKoerper, float distanz, float masse, String typ) {
+	public Planet(Stern bezugsKoerper, double distanz, double masse, String typ) {
 		super(bezugsKoerper, distanz, masse);
 		this.typ = typ;
 	}
@@ -49,5 +55,21 @@ public class Planet extends InOrbit<Stern>
 	{
 		this.bewegen();  //position aktualisieren
 		//TODO Rotation
+	}
+
+	@Override
+	public void add(InOrbit objectInOrbit) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**********************************************************************************/
+	/**
+	 * Methode für Testzwecke
+	 */
+	public void printStatus() {
+		Vector<Double> posErde = getPosition();
+		System.out.print(getLastRefresh()/1000 + ": ");
+		System.out.println(posErde.get(0) + " " + posErde.get(1) + " " + posErde.get(2));
 	}
 }

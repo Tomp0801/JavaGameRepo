@@ -10,12 +10,12 @@ public interface Orbitable {
 	/**
 	 * @return masse die masse dieses Objektes
 	 */
-	public float getMasse();
+	public double getMasse();
 	
 	/**
 	 * Fügt ein Objekt in den Orbit um dieses Objekt ein
 	 * @param objectInOrbit das Objekt, das in den Orbit soll
 	 */
-	public void add(InOrbit<Orbitable> objectInOrbit);		//TODO wie kann ich ne referenz auf dieses Objekt machen?
+	public void add(InOrbit objectInOrbit);		//TODO wie kann ich ne referenz auf dieses Objekt machen?
 	
 }

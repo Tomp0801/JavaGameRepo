@@ -15,11 +15,12 @@ import gameObject.SpaceObject;
  * @version 2.0
  * @param <BezugsKoerperKlasse>	Körper, um den das Objekt sich kreist
  */
-public abstract class InOrbit<Orbitable> extends SpaceObject {
+public abstract class InOrbit extends SpaceObject {
 	/**
 	 * entfernung des Objekts zu seinem BezugsObjekt
+	 * in km
 	 */
-	private float orbitRadius;
+	private double orbitRadius;
 	
 	/**
 	 * Körper, um den das Objekt kreist
@@ -28,13 +29,13 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 	
 	/**
 	 * Bewegungsvektor, Bezugspunkt ist das Objekt, 90° zu Positionsvektor
-	 * Einheit: m/s
+	 * Einheit: km (pro s)
 	 */
 	private Vector<Float> bewegungsVektor;
 	
 	/**
 	 * Geschwindigkeit, mit der sich der Planet bewegt
-	 * in m/s Länge des bewegungsVektors
+	 * in km/s Länge des bewegungsVektors
 	 */
 	private float bewegungsGeschwindigkeit;
 	
@@ -50,7 +51,7 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 	 * @param distanz die Distanz, mit der das Objekt den Körper umkreist
 	 * @param masse Masse des Objekts
 	 */
-	public InOrbit(Orbitable bezugsKoerper, float distanz, float masse) {
+	public InOrbit(Orbitable bezugsKoerper, double distanz, double masse) {
 		this.setBezugsKoerper(bezugsKoerper);
 		this.setOrbitRadius(distanz);
 		this.setMasse(masse);
@@ -59,6 +60,7 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 		 * Bewegungsgeschwindigkeit v:
 		 * v = sqrt(masseBezugsStern * Gravitationskonstante / orbitRadius)
 		 * ergibt sich aus der Gleichsetzung von Zentrifugal- und Gravitationskraft
+		 * Einheit: km pro s
 		 */
 		float v = (float) Math.sqrt(((SpaceObject) bezugsKoerper).getMasse() * Constants.G / getOrbitRadius());
 		//TODO für 3D abändern
@@ -66,8 +68,10 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 		setBewegungsVektor(random * v, (float)0); //für 2D nur x-Teil des Vektors einstellen 
 		
 		//TODO an zufälliger Position um den Stern herum platzieren
+		this.setPosition(orbitRadius, 0, 0);
 		
-		//TODO add to bezugsKörper
+		//dem Bezugskörper hinzufügen
+		bezugsKoerper.add(this);
 	
 		setLastRefresh(System.currentTimeMillis());	//last Refresh initialisieren
 	}
@@ -76,14 +80,14 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 	/**
 	 * @return the orbitRadius
 	 */
-	public float getOrbitRadius() {
+	public double getOrbitRadius() {
 		return orbitRadius;
 	}
 
 	/**
 	 * @param orbitRadius the orbitRadius to set
 	 */
-	protected void setOrbitRadius(float orbitRadius) {
+	protected void setOrbitRadius(double orbitRadius) {
 		this.orbitRadius = orbitRadius;
 	}
 
@@ -114,8 +118,8 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 	protected void setBewegungsVektor(float bewegungX, float bewegungY) {
 		Vector<Float> bewegungsVektor = new Vector<Float>(2);
 		
-		bewegungsVektor.set(0, bewegungX);
-		bewegungsVektor.set(1, bewegungY);
+		bewegungsVektor.add(bewegungX);
+		bewegungsVektor.add(bewegungY);
 		
 		this.bewegungsVektor = bewegungsVektor;
 	}
@@ -148,26 +152,24 @@ public abstract class InOrbit<Orbitable> extends SpaceObject {
 		long passedTime;
 		long prevRefresh = lastRefresh;
 		lastRefresh = System.currentTimeMillis();
-		float angleX, angleY;
-		float wegX, wegY;
-		Vector<Float> position = this.getPosition(); 
+		double angleX, angleY;
+		double wegX, wegY;
+		Vector<Double> position = this.getPosition(); 
 		
 		passedTime = lastRefresh - prevRefresh;
 		
-		
-		//Berechnung des zurückgelegten weges in x-Richtung
-		wegX = (float)passedTime / 1000 * bewegungsVektor.get(0);
-		//Berechnung des Winkels in x-Richtung
-		//Prozentsatz von 2pi : weg / Gesamt orbit länge
-		angleX = 2 * (float)Math.PI * orbitRadius / wegX * 2 * (float)Math.PI;
-		//Berechnung des zurückgelegten weges in x-Richtung		
-		wegY = (float)passedTime / 1000 * bewegungsVektor.get(1);
-		//Berechnung des Winkels in x-Richtung
-		//Prozentsatz von 2pi : weg / Gesamt orbit länge
-		angleY = 2 * (float)Math.PI * orbitRadius / wegY * 2 * (float)Math.PI;
-		
-		//Winkel auf aktuelle Position addieren
-		this.setPosition(orbitRadius, position.get(1) + angleX, position.get(2) + angleY);
+		if (passedTime > 0) {
+			//Berechnung des zurückgelegten weges in x- und y-Richtung
+			wegX = passedTime / 1000 * bewegungsVektor.get(0);
+			wegY = passedTime / 1000 * bewegungsVektor.get(1);
+			//Berechnung des Winkels in x-Richtung und y-Richtung
+			//Prozentsatz von 2pi : weg / Gesamt orbit länge
+			angleX = 2 * Math.PI * wegX / (orbitRadius * 2 * Math.PI);
+			angleY = 2 * Math.PI * wegY / (orbitRadius * 2 * Math.PI);
+			
+			//Winkel auf aktuelle Position addieren
+			this.setPosition(orbitRadius, position.get(1) + angleX, position.get(2) + angleY);
+		}
 		
 	}
 }

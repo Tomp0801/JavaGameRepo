@@ -13,8 +13,9 @@ public class SpaceObject
 {
 	/**
 	 * Masse des Objekts in Kg 
+	 * TODO Masse aus dem Radius des Objekts ermitteln
 	 */
-	private float masse;
+	private double masse;
 	
 	/**
 	 * Radius des Kugelförmigen Objekts
@@ -24,19 +25,19 @@ public class SpaceObject
 	/**
 	 * Position der aktuellen Sektion (Sonnensystem) in Polarkoordinaten
 	 */
-	private Vector<Float> position;
+	private Vector<Double> position;
 
 	/**
 	 * @return die masse
 	 */
-	public float getMasse() {
+	public double getMasse() {
 		return masse;
 	}
 	
 	/**
 	 * @param masse setzt die masse
 	 */
-	public void setMasse(float masse) {
+	public void setMasse(double masse) {
 		this.masse = masse;
 	}
 
@@ -57,19 +58,19 @@ public class SpaceObject
 	/**
 	 * @return the position
 	 */
-	public Vector<Float> getPosition() {
+	public Vector<Double> getPosition() {
 		return position;
 	}
 
 	/**
 	 * @param position the position to set
 	 */
-	public void setPosition(float r, float angleXY, float angleYZ) {
-		Vector<Float> positionsVektor = new Vector<Float>(3);
+	public void setPosition(double r, double angleXY, double angleYZ) {
+		Vector<Double> positionsVektor = new Vector<Double>(3);
 		
-		positionsVektor.set(0, r);
-		positionsVektor.set(1, angleXY);
-		positionsVektor.set(2, angleYZ);
+		positionsVektor.add(r);
+		positionsVektor.add(angleXY);
+		positionsVektor.add(angleYZ);
 		
 		this.position = positionsVektor;
 	}
