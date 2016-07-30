@@ -1,6 +1,18 @@
 package himmelskoerper;
 
-public class Mond extends Himmelskoerper implements Bewohnbar, ImOrbit
+/**
+ * Ein Himmelskörper, bewohnbar, wenn fest
+ * Umkreist einen Planeten
+ * 
+ * @author Thomas
+ * @version 1.0
+ */
+public class Mond extends InOrbit<Planet>
 {
+
+	public Mond(Planet bezugsKoerper, float distanz, float masse) {
+		super(bezugsKoerper, distanz, masse);
+		// TODO Auto-generated constructor stub
+	}
 
 }
