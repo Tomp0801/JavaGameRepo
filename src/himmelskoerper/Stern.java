@@ -3,13 +3,14 @@ package himmelskoerper;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+
 /**
  * Ein Stern, um den Planeten Kreisen können
  * 
  * @author Thomas
  * @version 0.0
  */
-public class Stern extends Himmelskoerper implements Orbitable
+public class Stern extends InOrbit implements Orbitable
 {
 	/**
 	 * Liste der Planeten, die den Stern umkreisen
@@ -22,9 +23,9 @@ public class Stern extends Himmelskoerper implements Orbitable
 	 * @param masse sets masse of Stern
 	 * @param radius sets radius of Stern
 	 */
-	Stern(double masse, float radius) {
-		setMasse(masse);
-		setRadius(radius);
+	Stern(SchwarzesLoch bezugsKoerper, double distanz, double masse, float radius) {
+		//TODO radius
+		super(bezugsKoerper, distanz, masse, "gas");
 		
 		planeten = new LinkedList<Planet>();
 	}
@@ -52,9 +53,7 @@ public class Stern extends Himmelskoerper implements Orbitable
 				planeten.add(index, newPlanet);
 			}
 		}
-		
-		
-		
+
 	}
 
 }

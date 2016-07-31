@@ -1,8 +1,8 @@
 package gameObject;
 
-import himmelskoerper.Bewohnbar;
+import himmelskoerper.Betretbar;
 
-public class SpielerObjekt extends SpaceObject implements Bewohnbar
+public class SpielerObjekt implements Betretbar
 {
 
 }

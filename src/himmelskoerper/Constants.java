@@ -4,7 +4,7 @@ package himmelskoerper;
  * Klasse mit physikalischen Konstanten, die für verschiedene Berechnungen benötigt werden 
  * 
  * @author Thomas
- * @version 0.0
+ * @version 1.0
  */
 public final class Constants {
 	/**

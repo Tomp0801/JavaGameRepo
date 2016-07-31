@@ -2,12 +2,13 @@ package himmelskoerper;
 
 import java.util.Vector;
 
-import gameObject.SpaceObject;
-
 /**
  * Eine abstrakte Klasse für Objekte, die sich im Orbit um ein anderes Objekt befinden
  * In dieser Klasse werden für den Orbit wichtige Parameter definiert
  * außerdem ist die Methode bewegen definiert
+ * 
+ * Um das Objekt nicht in einen Orbit zu packen, BezugsObjekt gleich null setzen und 
+ * orbitRadius gleich 0
  *
  * TODO Rotation?
  *
@@ -38,11 +39,6 @@ public abstract class InOrbit extends SpaceObject {
 	 * in km/s Länge des bewegungsVektors
 	 */
 	private float bewegungsGeschwindigkeit;
-	
-	/**
-	 * Zeitpunkt der Letzten Positions- und Zustandsberechnung
-	 */
-	private long lastRefresh;
 
 	/**
 	 * Standardkonstruktor für inOrbit Objekt
@@ -51,27 +47,32 @@ public abstract class InOrbit extends SpaceObject {
 	 * @param distanz die Distanz, mit der das Objekt den Körper umkreist
 	 * @param masse Masse des Objekts
 	 */
-	public InOrbit(Orbitable bezugsKoerper, double distanz, double masse) {
+	public InOrbit(Orbitable bezugsKoerper, double distanz, double masse, String art) {
+		//TODO Radius
+		super(masse, 0, art);
 		this.setBezugsKoerper(bezugsKoerper);
 		this.setOrbitRadius(distanz);
-		this.setMasse(masse);
 		
-		/*
-		 * Bewegungsgeschwindigkeit v:
-		 * v = sqrt(masseBezugsStern * Gravitationskonstante / orbitRadius)
-		 * ergibt sich aus der Gleichsetzung von Zentrifugal- und Gravitationskraft
-		 * Einheit: km pro s
-		 */
-		float v = (float) Math.sqrt(((SpaceObject) bezugsKoerper).getMasse() * Constants.G / getOrbitRadius());
-		//TODO für 3D abändern
-		int random = (int)Math.round(Math.random()) * 2 - 1;	//zufallszahl: +1 oder -1
-		setBewegungsVektor(random * v, (float)0); //für 2D nur x-Teil des Vektors einstellen 
-		
-		//TODO an zufälliger Position um den Stern herum platzieren
-		this.setPosition(orbitRadius, 0, 0);
-		
-		//dem Bezugskörper hinzufügen
-		bezugsKoerper.add(this);
+		if (bezugsKoerper != null) {
+			/*
+			 * Bewegungsgeschwindigkeit v:
+			 * v = sqrt(masseBezugsStern * Gravitationskonstante / orbitRadius)
+			 * ergibt sich aus der Gleichsetzung von Zentrifugal- und Gravitationskraft
+			 * Einheit: km pro s
+			 */
+			float v = (float) Math.sqrt(((SpaceObject) bezugsKoerper).getMasse() * Constants.G / getOrbitRadius());
+			//TODO für 3D abändern
+			int random = (int)Math.round(Math.random()) * 2 - 1;	//zufallszahl: +1 oder -1
+			this.setBewegungsVektor(random * v, (float)0); //für 2D nur x-Teil des Vektors einstellen 
+			
+			//TODO an zufälliger Position um den Stern herum platzieren
+			this.setPosition(orbitRadius, 0, 0);
+			
+			//dem Bezugskörper hinzufügen
+			bezugsKoerper.add(this);
+		} else {
+			this.setBewegungsVektor((float)0, (float)0);
+		}
 	
 		setLastRefresh(System.currentTimeMillis());	//last Refresh initialisieren
 	}
@@ -130,35 +131,21 @@ public abstract class InOrbit extends SpaceObject {
 	public float getBewegungsGeschwindigkeit() {
 		return bewegungsGeschwindigkeit;
 	}
-	
-	/**
-	 * @return lastRefresh
-	 */
-	protected long getLastRefresh() {
-		return lastRefresh;
-	}
-
-	/**
-	 * @param lastRefresh sets lastRefresh
-	 */
-	protected void setLastRefresh(long lastRefresh) {
-		this.lastRefresh = lastRefresh;
-	}
 
 	/**
 	 * bewegt das Objekt zur richtigen aktuellen Position
 	 */
 	public void bewegen() {
 		long passedTime;
-		long prevRefresh = lastRefresh;
-		lastRefresh = System.currentTimeMillis();
+		long prevRefresh = getLastRefresh();
+		setLastRefresh(System.currentTimeMillis());
 		double angleX, angleY;
 		double wegX, wegY;
 		Vector<Double> position = this.getPosition(); 
 		
-		passedTime = lastRefresh - prevRefresh;
+		passedTime = getLastRefresh() - prevRefresh;
 		
-		if (passedTime > 0) {
+		if (orbitRadius > 0 && passedTime > 0) { 		//nur wenn auch Zeit vergangen ist und ein orbitRadius existiert
 			//Berechnung des zurückgelegten weges in x- und y-Richtung
 			wegX = passedTime / 1000 * bewegungsVektor.get(0);
 			wegY = passedTime / 1000 * bewegungsVektor.get(1);
@@ -170,6 +157,5 @@ public abstract class InOrbit extends SpaceObject {
 			//Winkel auf aktuelle Position addieren
 			this.setPosition(orbitRadius, position.get(1) + angleX, position.get(2) + angleY);
 		}
-		
 	}
 }

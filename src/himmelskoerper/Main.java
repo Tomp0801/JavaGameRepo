@@ -1,7 +1,5 @@
 package himmelskoerper;
 
-import java.util.Vector;
-
 /**
  * Klasse für reine Testzwecke
  * 
@@ -21,17 +19,28 @@ public class Main {
 
 		double masse = (1.989 * Math.pow(10, 30)); 
 		float radius = 695700;
-		sonne = new Stern(masse, radius);
+		sonne = new Stern(null, 0, masse, radius);		//Sonne nicht in einem Orbit
 		
 		//Planeten hinzufügen
 		Planet erde = new Planet(sonne, 149600000, 5.972 * Math.pow(10, 24), "fest");
 		
-		
+		Mond mond = new Mond(erde, 384400, 7.349 * Math.pow(10, 22));
 		
 		//"programmschleife"
 		while (true) {
 			erde.refresh();
+			System.out.println("Erde: ");
 			erde.printStatus();
+			
+			mond.bewegen();
+			System.out.println("Mond: ");
+			mond.printStatus();
+			
+			sonne.bewegen();
+			System.out.println("Sonne: ");
+			sonne.printStatus();
+			
+			System.out.println("___________________________________________________________");
 			
 			try {
 				Thread.sleep(2000);

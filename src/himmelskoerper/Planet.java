@@ -1,7 +1,7 @@
 package himmelskoerper;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Vector;
 
 /**
  * Ein Himmelskörper, bewohnbar, wenn fest
@@ -20,32 +20,16 @@ public class Planet extends InOrbit implements Orbitable
 	LinkedList<Mond> monde;
 	
 	/**
-	 * aktueller Winkel 
-	 */
-	private float rotationsWinkel;
-	
-	/**
-	 * Typ des Planeten : Gas oder Fest 
-	 */
-	private String typ;
-	
-	/**
 	 * Konstruktor 
 	 * @param bezugsKoerper
 	 * @param distanz
 	 * @param masse
 	 * @param typ der Typ des Planeten (gas oder fest)
 	 */
-	public Planet(Stern bezugsKoerper, double distanz, double masse, String typ) {
-		super(bezugsKoerper, distanz, masse);
-		this.typ = typ;
-	}
-	
-	/**
-	 * @return the typ
-	 */
-	public String getTyp() {
-		return typ;
+	public Planet(Stern bezugsKoerper, double distanz, double masse, String art) {
+		super(bezugsKoerper, distanz, masse, art);
+		
+		monde = new LinkedList<Mond>();
 	}
 
 	/**
@@ -57,19 +41,28 @@ public class Planet extends InOrbit implements Orbitable
 		//TODO Rotation
 	}
 
+	/**
+	 * fügt Monde aufsteigend sortiert nach der Distanz zum Planeten ein
+	 * @param onjectInOrbit der Mond, der hinzugefügt werden soll
+	 */
 	@Override
 	public void add(InOrbit objectInOrbit) {
-		// TODO Auto-generated method stub
+		Mond newMoon = (Mond) objectInOrbit;
 		
-	}
-	
-	/**********************************************************************************/
-	/**
-	 * Methode für Testzwecke
-	 */
-	public void printStatus() {
-		Vector<Double> posErde = getPosition();
-		System.out.print(getLastRefresh()/1000 + ": ");
-		System.out.println(posErde.get(0) + " " + posErde.get(1) + " " + posErde.get(2));
+		if (monde.isEmpty()) {		//wenn die Liste noch leer ist
+			monde.add(newMoon);
+		} else {		//wenn schon Monde vorhanden sind
+			Iterator<Mond> iterator = monde.iterator();
+			int index = 0;
+											//solange die Distanz zum neuen Mond kleiner ist als die des nächsten
+			while (iterator.hasNext() && newMoon.getOrbitRadius() < iterator.next().getOrbitRadius()) {
+				index++;		//index wird parallel mitgezählt
+			}
+			if (index >= monde.size()) {	//wenn ganz bis zum Ende gelaufen bei der Suche
+				monde.addLast(newMoon);	//hinten anfügen
+			} else {
+				monde.add(index, newMoon);
+			}
+		}
 	}
 }

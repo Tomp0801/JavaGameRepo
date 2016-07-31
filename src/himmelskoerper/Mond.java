@@ -10,8 +10,8 @@ package himmelskoerper;
 public class Mond extends InOrbit
 {
 
-	public Mond(Planet bezugsKoerper, float distanz, float masse) {
-		super(bezugsKoerper, distanz, masse);
+	public Mond(Planet bezugsKoerper, double distanz, double masse) {
+		super(bezugsKoerper, distanz, masse, "fest");
 		// TODO Auto-generated constructor stub
 	}
 
